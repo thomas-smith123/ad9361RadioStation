@@ -1,10 +1,14 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+#ifdef simulate
+    e.seed(0);
+#endif
 
     centralWidget = new QWidget;
     gridLayout = new QGridLayout;
@@ -69,6 +73,29 @@ MainWindow::MainWindow(QWidget *parent)
     // tab
     {
 
+        {
+            PlotLayout = new QGridLayout;
+            PlotWidget = new QWidget;
+            fftplot = new QCustomPlot;
+            fftplot->addGraph();
+
+
+            xAxis = fftplot->xAxis;
+            yAxis = fftplot->yAxis;
+
+            spectrum = new QCPColorMap(xAxis,yAxis);
+            spectrum->data()->setSize(spectrumPoints,61);
+            spectrum->setGradient(QCPColorGradient::gpJet);
+
+            fftplot->setInteractions(QCP::iRangeDrag|QCP::iRangeZoom);
+
+            fftplot->rescaleAxes();
+            fftplot->replot();
+            PlotLayout->addWidget(fftplot);
+            PlotWidget->setLayout(PlotLayout);
+            tab->addTab(PlotWidget,"Show");
+
+        }
         {//table
             TableWidget = new QWidget;
             TableLayout = new QGridLayout;
@@ -139,12 +166,17 @@ MainWindow::MainWindow(QWidget *parent)
     gridLayout->addWidget(statistic,13,0,1,1);
     centralWidget->setLayout(gridLayout);
     this->setCentralWidget(centralWidget);
-    // ad9361 = new board_cfg;
-    // ad9361->ip = "193.168.1.5";
-    // ad9361->config(5,10,433);
-    // ui->setupUi(this);
     ad9361_started_flag=false;
+
+    refreshSpectrum = new QTimer;
+    refreshSpectrum->setInterval(100);
+
+    for(int i=0;i<spectrumPoints;i++)
+        spectrumData[i]=0;
+
+    connect(refreshSpectrum,&QTimer::timeout,this,&MainWindow::spectrum_update);
     connect(select, &QPushButton::pressed, this, &MainWindow::onPushselect);
+    refreshSpectrum->start();
 }
 void MainWindow::onPushselect()
 {
@@ -187,6 +219,28 @@ void MainWindow::onPushselect()
 
 }
 
+void MainWindow::spectrum_update()
+{
+
+#ifdef simulate
+    for(int i=0;i<spectrumPoints;i++)
+    {
+        spectrumData[i]=e();
+    }
+#endif
+    if(value_spectrum.size()>60)
+        value_spectrum.removeLast();
+    QVector<float> tmp = QVector<float> (spectrumPoints);
+    memcpy(tmp.data(),spectrumData,spectrumPoints*sizeof(float));
+    value_spectrum.prepend(tmp);
+    // copy(spectrumData,spectrumData+spectrumPoints,begin(tmp));
+    for(int i=0;i<value_spectrum.size();i++)
+        for(int j=0;j<spectrumPoints;j++)
+            spectrum->data()->setCell(j,i,value_spectrum[i][j]);
+    spectrum->rescaleDataRange(true);
+    fftplot->replot();
+}
+
 std::vector<std::complex<int16_t>> generate_sine_wave(
     float tone_freq_hz,       // 正弦波频率，例如 100kHz
     float sample_rate_hz,     // 采样率，例如 2.5MHz
@@ -208,5 +262,7 @@ std::vector<std::complex<int16_t>> generate_sine_wave(
 
 MainWindow::~MainWindow()
 {
+    delete spectrumData;
     delete ui;
 }
+

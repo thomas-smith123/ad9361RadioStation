@@ -13,8 +13,15 @@
 #include "QTextBrowser"
 #include "QSpinBox"
 #include "board_cfg.h"
+#include "../qcustomplot/qcustomplot.h"
+#include "QTimer"
+#include "QList"
 
-
+#define simulate
+#ifdef simulate
+    #include "iostream"
+    #include "random"
+#endif
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -47,19 +54,28 @@ public:
     QMap<int,QString> adsb_frame_log_map;
     QMenuBar *menuBar();
     // QMap<std::string, struct ADSBFrame> buff;
-
-
-
-
-
+    QCustomPlot *fftplot;
+    QCPColorMap *spectrum;
+    QCPAxis *xAxis,*yAxis;
     bool ad9361_started_flag;
     board_cfg *ad9361;
+    QTimer *refreshSpectrum;
+
+    int fftPoints=1024;
+    int spectrumPoints = fftPoints;
+    float *spectrumData = new float[spectrumPoints];
+#ifdef simulate
+    std::default_random_engine e;
+#endif
+    // FUNCTIONS
 
 
 private:
+    QList<QVector<float>> value_spectrum;
     Ui::MainWindow *ui;
 
 public slots:
+    void spectrum_update();
     void onPushselect();
 };
 
