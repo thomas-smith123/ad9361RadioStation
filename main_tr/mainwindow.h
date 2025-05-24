@@ -64,6 +64,7 @@ public:
     int fftPoints=1024;
     int spectrumPoints = fftPoints;
     float *spectrumData = new float[spectrumPoints];
+    // QCPSelectionRect *selectRect;
 #ifdef simulate
     std::default_random_engine e;
 #endif

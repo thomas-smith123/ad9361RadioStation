@@ -79,7 +79,7 @@ MainWindow::MainWindow(QWidget *parent)
             fftplot = new QCustomPlot;
             fftplot->addGraph();
 
-
+            // selectRect = new QCPSelectionRect(fftplot);
             xAxis = fftplot->xAxis;
             yAxis = fftplot->yAxis;
 
@@ -87,7 +87,9 @@ MainWindow::MainWindow(QWidget *parent)
             spectrum->data()->setSize(spectrumPoints,61);
             spectrum->setGradient(QCPColorGradient::gpJet);
 
-            fftplot->setInteractions(QCP::iRangeDrag|QCP::iRangeZoom);
+            fftplot->setInteractions(QCP::iRangeZoom);
+            // fftplot->setSelectionRect(selectRect);
+            fftplot->setSelectionRectMode(QCP::srmZoom);
 
             fftplot->rescaleAxes();
             fftplot->replot();
@@ -169,7 +171,7 @@ MainWindow::MainWindow(QWidget *parent)
     ad9361_started_flag=false;
 
     refreshSpectrum = new QTimer;
-    refreshSpectrum->setInterval(100);
+    refreshSpectrum->setInterval(10);
 
     for(int i=0;i<spectrumPoints;i++)
         spectrumData[i]=0;
