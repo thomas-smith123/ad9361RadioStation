@@ -4,20 +4,21 @@
 #include "random"
 #endif
 
-board_cfg::board_cfg(QObject *parent, double buffer_size)
+board_cfg::board_cfg(QObject *parent, double buffer_size_rx, double buffer_size_tx)
     : QObject{parent}
 {
     // sharedresources = sharedresource;
     // ring_buffer = ringHandle;
-    board_cfg::buffer_size = buffer_size;
+    board_cfg::buffer_size_rx = buffer_size_rx;
+    board_cfg::buffer_size_tx = buffer_size_tx;
     start_flag = false;
     // emit_signal_to_process = true;
     config_flag = 1;
     this->chunk_size = 1024*10;
-    I0 = (int16_t*)malloc(sizeof(int16_t) * buffer_size);
-    Q0 = (int16_t*)malloc(sizeof(int16_t) * buffer_size);
-    I1 = (int16_t*)malloc(sizeof(int16_t) * buffer_size);
-    Q1 = (int16_t*)malloc(sizeof(int16_t) * buffer_size);
+    I0 = (int16_t*)malloc(sizeof(int16_t) * buffer_size_rx);
+    Q0 = (int16_t*)malloc(sizeof(int16_t) * buffer_size_rx);
+    I1 = (int16_t*)malloc(sizeof(int16_t) * buffer_size_rx);
+    Q1 = (int16_t*)malloc(sizeof(int16_t) * buffer_size_rx);
 }
 void board_cfg::stop()
 {
@@ -57,49 +58,49 @@ void board_cfg::config(float bw=5, float fs=10, float rx_lo=437, float tx_lo=433
 
     if(this->config_flag)
     {
-        // IIO_ENSURE(get_ad9361_stream_dev(ctx, RX, &rx) && "No rx dev found", "No rx dev found");
+        IIO_ENSURE(get_ad9361_stream_dev(ctx, RX, &rx) && "No rx dev found", "No rx dev found");
         IIO_ENSURE(get_ad9361_stream_dev(ctx, TX, &tx) && "No tx dev found", "No tx dev found");
     }
 
     if(this->config_flag)
     {
-        // IIO_ENSURE(cfg_ad9361_streaming_ch(ctx, &rxcfg, RX, 0) && "RX port 0 not found", "RX port 0 not found");
+        IIO_ENSURE(cfg_ad9361_streaming_ch(ctx, &rxcfg, RX, 0) && "RX port 0 not found", "RX port 0 not found");
         IIO_ENSURE(cfg_ad9361_streaming_ch(ctx, &txcfg, TX, 0) && "TX port 0 not found", "TX port 0 not found");
         printf("* Initializing AD9361 IIO streaming channels\n");
     }
 
     if(this->config_flag)
     {
-        // IIO_ENSURE(get_ad9361_stream_ch(ctx, RX, rx, 0, &rx0_i) && "RX chan i not found", "RX chan i not found");
-        // IIO_ENSURE(get_ad9361_stream_ch(ctx, RX, rx, 1, &rx0_q) && "RX chan q not found", "RX chan q not found");
+        IIO_ENSURE(get_ad9361_stream_ch(ctx, RX, rx, 0, &rx0_i) && "RX chan i not found", "RX chan i not found");
+        IIO_ENSURE(get_ad9361_stream_ch(ctx, RX, rx, 1, &rx0_q) && "RX chan q not found", "RX chan q not found");
 
         IIO_ENSURE(get_ad9361_stream_ch(ctx, TX, tx, 0, &tx0_i) && "TX chan i not found", "TX chan i not found");
         IIO_ENSURE(get_ad9361_stream_ch(ctx, TX, tx, 1, &tx0_q) && "TX chan q not found", "TX chan q not found");
 
-        // iio_channel_enable(rx0_i);
-        // iio_channel_enable(rx0_q);
+        iio_channel_enable(rx0_i);
+        iio_channel_enable(rx0_q);
         iio_channel_enable(tx0_i);
         iio_channel_enable(tx0_q);
 
 
-        // rxbuf = iio_device_create_buffer(rx, board_cfg::buffer_size, false);
-        txbuf = iio_device_create_buffer(tx, board_cfg::buffer_size, false);
+        rxbuf = iio_device_create_buffer(rx, board_cfg::buffer_size_rx, false);
+        txbuf = iio_device_create_buffer(tx, board_cfg::buffer_size_tx, false);
     }
 
     if(this->config_flag)
     {
-        // if (!rxbuf) {
-        //     perror("Could not create RX buffer");
-        //     shutdownDevice();
-        // }
-        // p_inc_rx = iio_buffer_step(rxbuf);
-        // p_end_rx = (char*)iio_buffer_end(rxbuf);
+        if (!rxbuf) {
+            perror("Could not create RX buffer");
+            shutdownDevice();
+        }
+        p_inc_rx = iio_buffer_step(rxbuf);
+        p_end_rx = (char*)iio_buffer_end(rxbuf);
         if (!txbuf) {
             perror("Could not create TX buffer");
             shutdownDevice();
         }
-        p_inc_tx = iio_buffer_step(txbuf);
-        p_end_tx = (char*)iio_buffer_end(txbuf);
+        // p_inc_tx = iio_buffer_step(txbuf);
+        // p_end_tx = (char*)iio_buffer_end(txbuf);
 
     }
     // if (this->config_flag) {
@@ -163,7 +164,7 @@ void board_cfg::start_send(const std::vector<std::complex<int16_t>>& iq_data)
         // char* p_dat;
         // char* p_end;
         // ptrdiff_t p_inc;
-        p_dat_tx = (char*)iio_buffer_first(txbuf, tx0_i);
+        // p_dat_tx = (char*)iio_buffer_first(txbuf, tx0_i);
         nbytes_tx = iio_buffer_push(txbuf);
         if (nbytes_tx < 0) {
             fprintf(stderr, "Error pushing TX buffer: %zd\n", (int) nbytes_tx);

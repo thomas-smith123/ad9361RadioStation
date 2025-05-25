@@ -46,7 +46,7 @@ class board_cfg : public QObject
 public:
     bool emit_signal_to_process;
     QMutex *iq_lock;
-    double buffer_size;
+    double buffer_size_tx,buffer_size_rx;
     char start_flag;
     char config_flag; //0 fail, 1 success
     char *ip;
@@ -79,7 +79,7 @@ public:
     int16_t *Q1;
     void config(float bw,float fs,float rx_lo,float tx_lo);
     // explicit board_cfg(sharedsource* sharedresource, circular_buffer* ringHandle, QObject *parent = nullptr, double buffer_siz=1024*1024*5);
-    explicit board_cfg(QObject *parent = nullptr, double buffer_siz=1024*1024*5);
+    explicit board_cfg(QObject *parent = nullptr, double buffer_size_rx=1024*1024*5, double buffer_size_tx=1024);
     ~board_cfg();
     ptrdiff_t p_inc_rx, p_inc_tx;
     char *p_dat_tx, *p_end_tx, *p_dat_rx, *p_end_rx;
