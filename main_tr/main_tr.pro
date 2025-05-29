@@ -13,13 +13,15 @@ SOURCES += \
     board_cfg.cpp \
     fft_calculate.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    waveformdisplay/waveformdisplay.cpp
 
 HEADERS += \
     ../qcustomplot/qcustomplot.h \
     board_cfg.h \
     fft_calculate.h \
-    mainwindow.h
+    mainwindow.h \
+    waveformdisplay/waveformdisplay.h
 
 FORMS += \
     mainwindow.ui

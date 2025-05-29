@@ -13,15 +13,13 @@
 #include "QTextBrowser"
 #include "QSpinBox"
 #include "board_cfg.h"
-#include "../qcustomplot/qcustomplot.h"
+
 #include "QTimer"
 #include "QList"
+#include "waveformdisplay/waveformdisplay.h"
 
-#define simulate
-#ifdef simulate
-    #include "iostream"
-    #include "random"
-#endif
+
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -35,9 +33,10 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    QWidget *centralWidget, *MapWidget, *PlotWidget, *TableWidget, *FrameLogWidget, *TXWidget;
+    QWidget *centralWidget, *MapWidget, *TableWidget, *FrameLogWidget, *TXWidget;
+    waveFormDisplay *waveformDisplay;
     //layout
-    QGridLayout *gridLayout, *MapLayout, *PlotLayout, *TableLayout, *FrameLogLayout, *TXLayout;
+    QGridLayout *gridLayout, *MapLayout, *TableLayout, *FrameLogLayout, *TXLayout;
     QHBoxLayout *ConfigLayout, *StaticticLayout;
     QGroupBox *statistic;
     QTabWidget *tab;
@@ -54,29 +53,23 @@ public:
     QMap<int,QString> adsb_frame_log_map;
     QMenuBar *menuBar();
     // QMap<std::string, struct ADSBFrame> buff;
-    QCustomPlot *fftplot;
-    QCPColorMap *spectrum;
-    QCPAxis *xAxis,*yAxis;
+
     bool ad9361_started_flag;
     board_cfg *ad9361;
     QTimer *refreshSpectrum;
 
-    int fftPoints=1024;
-    int spectrumPoints = fftPoints;
-    float *spectrumData = new float[spectrumPoints];
+
     // QCPSelectionRect *selectRect;
-#ifdef simulate
-    std::default_random_engine e;
-#endif
+
     // FUNCTIONS
 
 
 private:
-    QList<QVector<float>> value_spectrum;
+
     Ui::MainWindow *ui;
 
 public slots:
-    void spectrum_update();
+
     void onPushselect();
 };
 

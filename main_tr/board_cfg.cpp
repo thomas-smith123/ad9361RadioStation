@@ -145,7 +145,7 @@ void board_cfg::start_read()
                 }
                 // sharedresources->emit_signal_to_process = false;
                 // ring_buffer->receiveDataSlot(I0,Q0,board_cfg::buffer_size,rxcfg.fs_hz);
-                emit read_onece_done(I0,Q0,board_cfg::buffer_size,rxcfg.fs_hz);
+                emit read_onece_done(I0,Q0,board_cfg::buffer_size_rx,rxcfg.fs_hz);
             }
         }
         qDebug()<<"exit reading";
