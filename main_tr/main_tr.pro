@@ -14,6 +14,7 @@ SOURCES += \
     fft_calculate.cpp \
     main.cpp \
     mainwindow.cpp \
+    waveformdisplay/fftwithcursor.cpp \
     waveformdisplay/waveformdisplay.cpp
 
 HEADERS += \
@@ -21,6 +22,7 @@ HEADERS += \
     board_cfg.h \
     fft_calculate.h \
     mainwindow.h \
+    waveformdisplay/fftwithcursor.h \
     waveformdisplay/waveformdisplay.h
 
 FORMS += \

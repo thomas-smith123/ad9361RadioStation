@@ -1,5 +1,4 @@
 #include "waveformdisplay.h"
-
 #include "QLabel"
 #include "QPushButton"
 waveFormDisplay::waveFormDisplay(QWidget *parent)
@@ -8,10 +7,14 @@ waveFormDisplay::waveFormDisplay(QWidget *parent)
 #ifdef simulate
     e.seed(0);
 #endif
+
     PlotLayout = new QGridLayout;
+    fftLayout = new QGridLayout;
     PlotWidget = new QWidget;
     spectrumplot = new QCustomPlot;
     fftplot = new QCustomPlot;
+    fftplotWidget = new QWidget;
+    // fftwithcursorWidget = new QWidget;
     // x = QVector<double>(spectrumPoints);
     // y = QVector<double>(spectrumPoints);
 
@@ -22,12 +25,15 @@ waveFormDisplay::waveFormDisplay(QWidget *parent)
     fftplot->graph(0)->setPen(QPen(Qt::blue));
     fftplot->setOpenGl(true);
     fftplot->graph(0)->setAntialiased(false);
+
     // fftplot->graph(0)->setBrush(QBrush(QColor(0, 0, 255, 20)));
     // selectRect = new QCPSelectionRect(spectrumplot);
     xAxis_spectrum = spectrumplot->xAxis;
     yAxis_spectrum = spectrumplot->yAxis;
     xAxis_fft = fftplot->xAxis;
     yAxis_fft = fftplot->yAxis;
+    yAxis_fft->setVisible(false);
+    xAxis_spectrum->setVisible(false);
     spectrum = new QCPColorMap(xAxis_spectrum,yAxis_spectrum);
     spectrum->data()->setSize(spectrumPoints,61);
     spectrum->setGradient(QCPColorGradient::gpJet);
@@ -39,12 +45,20 @@ waveFormDisplay::waveFormDisplay(QWidget *parent)
     spectrumplot->replot();
     fftplot->rescaleAxes();
     fftplot->replot();
+    a = new fftwithcursor(fftplot,this);
+    // fftplotWidget->setLayout(fftLayout);
+
     PlotLayout->addWidget(spectrumplot);
     PlotLayout->addWidget(fftplot);
+    // PlotLayout->addWidget(a);
+
+
     PlotWidget->setLayout(PlotLayout);
 
     setLayout(PlotLayout);
-
+    connect(fftplot,&QCustomPlot::afterReplot,[this]() {
+        a->syncGeometry();
+    });
     x = new QVector<double> (spectrumPoints);
     for(int i=0;i<spectrumPoints;i++)
     {
