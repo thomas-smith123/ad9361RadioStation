@@ -53,6 +53,7 @@ MainWindow::MainWindow(QWidget *parent)
         // BW->setEnabled(false);
         select = new QPushButton;
         select->setText("Connect");
+
         ConfigLayout->addWidget(url_label,0);
         ConfigLayout->addWidget(url,10);
         ConfigLayout->addWidget(fs_label,0);
@@ -66,6 +67,7 @@ MainWindow::MainWindow(QWidget *parent)
         ConfigLayout->addWidget(numthread_label,1);
         ConfigLayout->addWidget(numthread,4);
         ConfigLayout->addWidget(select,1);
+        // ConfigLayout->addWidget(modulation,1);
     }
 
     // tab

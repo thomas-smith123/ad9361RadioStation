@@ -17,7 +17,7 @@
 #include "QTimer"
 #include "QList"
 #include "waveformdisplay/waveformdisplay.h"
-
+#include "configWidget/modulationselect.h"
 
 
 QT_BEGIN_NAMESPACE

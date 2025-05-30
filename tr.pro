@@ -1,4 +1,5 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
-    main_tr
+    ExpandableButton \
+    main_tr \
