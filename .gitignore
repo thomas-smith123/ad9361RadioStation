@@ -1,2 +1,6 @@
 /main_tr/build
 /build
+/ExpandableButton/build
+/waveformDisplay/.qtc_clangd
+/waveformDisplay/build
+/waveformDisplay/debug

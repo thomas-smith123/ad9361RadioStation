@@ -2,7 +2,7 @@
 #define FFT_CALCULATE_H
 
 #include <QObject>
-#include "fftw3.h"
+// #include "fftw3.h"
 
 class fft_calculate : public QObject
 {
@@ -10,8 +10,8 @@ class fft_calculate : public QObject
 public:
     explicit fft_calculate(int Points, QObject *parent = nullptr);
     ~fft_calculate();
-    fftw_complex *in, *out;
-    fftw_plan plan;
+    // fftw_complex *in, *out;
+    // fftw_plan plan;
     int fftPoints;
     float *output;
 signals:

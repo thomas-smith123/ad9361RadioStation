@@ -3,24 +3,19 @@
 
 #include <QObject>
 #include <QWidget>
+#include <QWidget>
 #include "QVBoxLayout"
-#include "../qcustomplot/qcustomplot.h"
+#include "qcustomplot/qcustomplot.h"
 #include "fftwithcursor.h"
-#define simulate
-#ifdef simulate
-    #include "iostream"
-    #include "random"
-#endif
 
-class QPushButton;
-class QLabel;
-class waveFormDisplay : public QWidget
+class waveformdisplay : public QWidget
 {
     Q_OBJECT
 public:
-    explicit waveFormDisplay(QWidget *parent = nullptr);
+    explicit waveformdisplay(QWidget *parent = nullptr);
     QWidget *PlotWidget, *fftplotWidget;
-    QGridLayout *PlotLayout, *fftLayout;
+    QGridLayout *fftLayout;
+    QVBoxLayout *PlotLayout;
     QCustomPlot *spectrumplot, *fftplot;
     QCPColorMap *spectrum;
     QCPAxis *xAxis_spectrum,*yAxis_spectrum, *xAxis_fft,*yAxis_fft;
@@ -29,11 +24,10 @@ public:
     int spectrumPoints = fftPoints;
     double *spectrumData = new double[spectrumPoints];
     QVector<double> *x;
-    fftwithcursor *a;
+    fftwithcursor *cursor1, *cursor2;
 #ifdef simulate
     std::default_random_engine e;
 #endif
-
 signals:
 
 public slots:
