@@ -16,7 +16,7 @@
 
 #include "QTimer"
 #include "QList"
-#include "waveformdisplay/waveformdisplay.h"
+#include "../waveformDisplay/waveformdisplay.h"
 // #include "configWidget/modulationselect.h"
 
 
@@ -34,7 +34,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     QWidget *centralWidget, *MapWidget, *TableWidget, *FrameLogWidget, *TXWidget;
-    waveFormDisplay *waveformDisplay;
+    waveformdisplay *waveformDisplay;
     //layout
     QGridLayout *gridLayout, *MapLayout, *TableLayout, *FrameLogLayout, *TXLayout;
     QHBoxLayout *ConfigLayout, *StaticticLayout;

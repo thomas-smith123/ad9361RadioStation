@@ -7,7 +7,7 @@
 #include "QVBoxLayout"
 #include "qcustomplot/qcustomplot.h"
 #include "fftwithcursor.h"
-
+#define simulate
 class waveformdisplay : public QWidget
 {
     Q_OBJECT

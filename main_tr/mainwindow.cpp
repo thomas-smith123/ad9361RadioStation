@@ -74,7 +74,7 @@ MainWindow::MainWindow(QWidget *parent)
     {
 
         {
-            waveformDisplay = new waveFormDisplay;
+            waveformDisplay = new waveformdisplay;
             tab->addTab(waveformDisplay,"Show");
 
         }
@@ -155,7 +155,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 
 
-    connect(refreshSpectrum,&QTimer::timeout,waveformDisplay,&waveFormDisplay::spectrum_update);
+    connect(refreshSpectrum,&QTimer::timeout,waveformDisplay,&waveformdisplay::spectrum_update);
     connect(select, &QPushButton::pressed, this, &MainWindow::onPushselect);
     refreshSpectrum->start();
 }

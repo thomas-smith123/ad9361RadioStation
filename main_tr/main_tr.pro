@@ -9,21 +9,23 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    ../qcustomplot/qcustomplot.cpp \
+    # ../qcustomplot/qcustomplot.cpp \
+    ../waveformDisplay/qcustomplot/qcustomplot.cpp \
+    ../waveformDisplay/waveformdisplay.cpp \
     board_cfg.cpp \
     fft_calculate.cpp \
     main.cpp \
     mainwindow.cpp \
-    waveformdisplay/fftwithcursor.cpp \
-    waveformdisplay/waveformdisplay.cpp
 
 HEADERS += \
-    ../qcustomplot/qcustomplot.h \
+    # ../qcustomplot/qcustomplot.h \
+    ../waveformDisplay/fftwithcursor.h \
+    ../waveformDisplay/qcustomplot/qcustomplot.h \
+    ../waveformDisplay/waveformdisplay.h \
     board_cfg.h \
     fft_calculate.h \
     mainwindow.h \
-    waveformdisplay/fftwithcursor.h \
-    waveformdisplay/waveformdisplay.h
+    waveformdisplay/fftwithcursor.h
 
 FORMS += \
     mainwindow.ui
