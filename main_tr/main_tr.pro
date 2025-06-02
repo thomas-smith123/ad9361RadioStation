@@ -10,6 +10,8 @@ CONFIG += c++17
 
 SOURCES += \
     # ../qcustomplot/qcustomplot.cpp \
+    ../freqctrl/freqctrl.cpp \
+    ../meter/meter.cpp \
     ../waveformDisplay/qcustomplot/qcustomplot.cpp \
     ../waveformDisplay/waveformdisplay.cpp \
     board_cfg.cpp \
@@ -19,6 +21,8 @@ SOURCES += \
 
 HEADERS += \
     # ../qcustomplot/qcustomplot.h \
+    ../freqctrl/freqctrl.h \
+    ../meter/meter.h \
     ../waveformDisplay/fftwithcursor.h \
     ../waveformDisplay/qcustomplot/qcustomplot.h \
     ../waveformDisplay/waveformdisplay.h \
